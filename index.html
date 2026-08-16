@@ -378,11 +378,104 @@
   .reveal{opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease;}
   .reveal.in{opacity:1; transform:translateY(0);}
 
+  /* Hamburger menu (hidden on desktop) */
+  .menu-btn{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:38px;
+    height:38px;
+    background:none;
+    border:1px solid var(--border);
+    border-radius:10px;
+    cursor:pointer;
+    padding:0;
+    flex-shrink:0;
+  }
+  .menu-btn span{
+    width:18px;
+    height:2px;
+    background:var(--text);
+    margin:0 auto;
+    transition:transform .3s, opacity .3s;
+  }
+  .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .menu-btn.open span:nth-child(2){opacity:0;}
+  .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  .mobile-menu{
+    display:none;
+    flex-direction:column;
+    gap:4px;
+    padding:0 6vw;
+    max-height:0;
+    overflow:hidden;
+    background:rgba(8,7,12,0.97);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:73px;
+    z-index:49;
+    transition:max-height .35s ease, padding .35s ease;
+  }
+  .mobile-menu.open{
+    padding:18px 6vw 28px;
+    max-height:400px;
+  }
+  .mobile-menu a{
+    color:var(--muted);
+    text-decoration:none;
+    padding:14px 4px;
+    font-size:1rem;
+    border-bottom:1px solid var(--border);
+  }
+  .mobile-menu a:last-child{border-bottom:none;}
+  .mobile-menu .btn-primary{
+    text-align:center;
+    border-bottom:none;
+    color:#fff;
+  }
+
   @media (max-width:768px){
+    nav{padding:18px 5vw;}
     .nav-links{display:none;}
-    section{padding:80px 6vw;}
-    .about{flex-direction:column;}
-    .contact-box{padding:44px 24px;}
+    .desktop-only{display:none;}
+    .menu-btn{display:flex;}
+    .mobile-menu{display:flex;}
+
+    .hero{min-height:auto; padding:60px 6vw 50px;}
+    h1{font-size:clamp(2rem,9vw,2.8rem);}
+    .hero p{font-size:1rem;}
+    .hero-ctas{flex-direction:column; width:100%; gap:12px;}
+    .hero-ctas a{width:100%; text-align:center; padding:15px 20px;}
+    .stats{gap:30px; margin-top:56px;}
+    .stat .num{font-size:1.7rem;}
+
+    section{padding:64px 6vw;}
+    .section-title{font-size:1.6rem;}
+    .section-head{margin-bottom:44px;}
+
+    .projects-grid{grid-template-columns:1fr; gap:20px;}
+    .project-thumb{height:160px; font-size:1.8rem;}
+    .project-body{padding:22px;}
+
+    .services-grid{grid-template-columns:1fr; gap:18px;}
+    .service-card{padding:26px 22px;}
+
+    .about{flex-direction:column; gap:36px;}
+    .about-visual{max-width:220px; margin:0 auto;}
+
+    .contact-box{padding:40px 22px;}
+    .contact-actions{flex-direction:column; width:100%;}
+    .contact-actions a{width:100%; text-align:center;}
+
+    footer{padding:30px 6vw; font-size:0.82rem;}
+  }
+
+  @media (max-width:380px){
+    h1{font-size:1.8rem;}
+    .logo{font-size:1.3rem;}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -409,8 +502,19 @@
       <a href="#about">من نحن</a>
       <a href="#contact">تواصل</a>
     </div>
-    <a class="nav-cta" href="#contact">اطلب موقعك</a>
+    <a class="nav-cta desktop-only" href="#contact">اطلب موقعك</a>
+    <button class="menu-btn" id="menuBtn" aria-label="فتح القائمة" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#projects">أعمالنا</a>
+    <a href="#services">خدماتنا</a>
+    <a href="#about">من نحن</a>
+    <a href="#contact">تواصل</a>
+    <a class="btn-primary" href="#contact" style="margin-top:10px;">اطلب موقعك</a>
+  </div>
 
   <!-- HERO -->
   <section class="hero" style="padding-top:0;">
@@ -575,6 +679,21 @@
 </div>
 
 <script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', ()=>{
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuBtn.classList.toggle('open', isOpen);
+    menuBtn.setAttribute('aria-expanded', isOpen);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      mobileMenu.classList.remove('open');
+      menuBtn.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded','false');
+    });
+  });
+
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
