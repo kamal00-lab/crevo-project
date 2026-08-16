@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crevo — بورتفوليو</title>
+<style>
+  :root{
+    --bg: #08070c;
+    --bg-soft: #0d0b14;
+    --card: #120f1a;
+    --border: rgba(255,255,255,0.08);
+    --text: #f2f0f7;
+    --muted: #9a94ab;
+    --violet-1: #8b5cf6;
+    --violet-2: #c084fc;
+    --violet-3: #a78bfa;
+    --glow: rgba(139,92,246,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Tajawal','Segoe UI',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+
+  /* Ambient background glow */
+  .bg-glow{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(600px circle at 20% 10%, rgba(139,92,246,0.16), transparent 60%),
+      radial-gradient(500px circle at 85% 25%, rgba(192,132,252,0.12), transparent 60%),
+      radial-gradient(700px circle at 50% 90%, rgba(139,92,246,0.10), transparent 60%);
+  }
+
+  .wrap{position:relative;z-index:1;}
+
+  /* NAV */
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:24px 6vw;
+    position:sticky;
+    top:0;
+    z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(8,7,12,0.7);
+    border-bottom:1px solid var(--border);
+  }
+  .logo{
+    font-size:1.6rem;
+    font-weight:900;
+    background:linear-gradient(135deg,var(--violet-2),var(--violet-1));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    letter-spacing:0.5px;
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    font-size:0.95rem;
+    color:var(--muted);
+  }
+  .nav-links a{color:var(--muted);text-decoration:none;transition:color .25s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    padding:10px 22px;
+    border-radius:100px;
+    border:1px solid var(--border);
+    color:var(--text);
+    text-decoration:none;
+    font-size:0.9rem;
+    transition:all .25s;
+  }
+  .nav-cta:hover{border-color:var(--violet-1); box-shadow:0 0 20px var(--glow);}
+
+  /* HERO */
+  .hero{
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0 6vw;
+    position:relative;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 18px;
+    border-radius:100px;
+    border:1px solid rgba(139,92,246,0.35);
+    color:var(--violet-3);
+    font-size:0.85rem;
+    margin-bottom:32px;
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+  }
+  h1{
+    font-size:clamp(2.6rem,6vw,5rem);
+    font-weight:900;
+    line-height:1.15;
+    max-width:900px;
+    opacity:0;
+    animation:fadeUp .8s ease .15s forwards;
+  }
+  h1 .accent{
+    background:linear-gradient(135deg,var(--violet-2),var(--violet-1) 70%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    margin-top:24px;
+    max-width:620px;
+    color:var(--muted);
+    font-size:1.15rem;
+    line-height:1.9;
+    opacity:0;
+    animation:fadeUp .8s ease .3s forwards;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:16px;
+    margin-top:44px;
+    opacity:0;
+    animation:fadeUp .8s ease .45s forwards;
+  }
+  .btn-primary{
+    padding:16px 38px;
+    border-radius:100px;
+    border:none;
+    background:linear-gradient(135deg,var(--violet-3),var(--violet-1));
+    color:#fff;
+    font-size:1rem;
+    font-weight:700;
+    text-decoration:none;
+    box-shadow:0 8px 30px var(--glow);
+    transition:transform .25s, box-shadow .25s;
+  }
+  .btn-primary:hover{transform:translateY(-3px); box-shadow:0 12px 40px rgba(139,92,246,0.5);}
+  .btn-ghost{
+    padding:16px 38px;
+    border-radius:100px;
+    border:1px solid var(--border);
+    color:var(--text);
+    text-decoration:none;
+    font-size:1rem;
+    transition:all .25s;
+  }
+  .btn-ghost:hover{border-color:var(--violet-1);}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(24px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* stat strip */
+  .stats{
+    display:flex;
+    justify-content:center;
+    gap:60px;
+    margin-top:80px;
+    flex-wrap:wrap;
+    opacity:0;
+    animation:fadeUp .8s ease .6s forwards;
+  }
+  .stat{text-align:center;}
+  .stat .num{
+    font-size:2.2rem;
+    font-weight:900;
+    background:linear-gradient(135deg,var(--violet-2),var(--violet-1));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .stat .label{color:var(--muted); font-size:0.9rem; margin-top:6px;}
+
+  /* SECTION GENERIC */
+  section{padding:120px 6vw;}
+  .section-head{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto 64px;
+  }
+  .section-tag{
+    color:var(--violet-3);
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .section-title{
+    font-size:clamp(1.8rem,3.5vw,2.6rem);
+    font-weight:900;
+    margin-top:14px;
+  }
+  .section-desc{color:var(--muted); margin-top:16px; line-height:1.8; font-size:1.05rem;}
+
+  /* PROJECTS */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:28px;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .project-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    overflow:hidden;
+    transition:transform .35s, border-color .35s, box-shadow .35s;
+    text-decoration:none;
+    color:var(--text);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .project-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(139,92,246,0.4);
+    box-shadow:0 20px 60px rgba(139,92,246,0.15);
+  }
+  .project-thumb{
+    height:200px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.4rem;
+    font-weight:900;
+    color:rgba(255,255,255,0.9);
+    letter-spacing:1px;
+  }
+  .project-body{padding:26px;}
+  .project-tag{
+    display:inline-block;
+    font-size:0.75rem;
+    padding:4px 12px;
+    border-radius:100px;
+    border:1px solid var(--border);
+    color:var(--muted);
+    margin-bottom:14px;
+  }
+  .project-body h3{font-size:1.3rem; font-weight:800; margin-bottom:10px;}
+  .project-body p{color:var(--muted); font-size:0.95rem; line-height:1.7;}
+  .project-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:18px;
+    color:var(--violet-3);
+    font-size:0.9rem;
+    font-weight:700;
+  }
+  .project-card:hover .project-link{gap:12px;}
+  .project-link svg{transition:transform .25s;}
+  .project-card:hover .project-link svg{transform:translateX(-4px);}
+
+  /* SERVICES */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .service-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:32px 28px;
+    transition:border-color .3s, transform .3s;
+  }
+  .service-card:hover{border-color:rgba(139,92,246,0.35); transform:translateY(-4px);}
+  .service-icon{
+    width:52px; height:52px;
+    border-radius:14px;
+    background:linear-gradient(135deg, rgba(139,92,246,0.25), rgba(192,132,252,0.15));
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:20px;
+    font-size:1.4rem;
+  }
+  .service-card h3{font-size:1.15rem; font-weight:800; margin-bottom:10px;}
+  .service-card p{color:var(--muted); font-size:0.92rem; line-height:1.7;}
+
+  /* ABOUT */
+  .about{
+    display:flex;
+    gap:64px;
+    max-width:1100px;
+    margin:0 auto;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .about-visual{
+    flex:1;
+    min-width:280px;
+    aspect-ratio:1;
+    max-width:380px;
+    border-radius:28px;
+    background:linear-gradient(135deg, rgba(139,92,246,0.18), rgba(192,132,252,0.06));
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .about-visual .ring{
+    width:70%;
+    aspect-ratio:1;
+    border-radius:50%;
+    border:1px solid rgba(139,92,246,0.35);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .about-visual .ring-inner{
+    width:70%;
+    aspect-ratio:1;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--violet-1),var(--violet-2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:2.4rem;
+    font-weight:900;
+    color:#08070c;
+  }
+  .about-text{flex:1.3; min-width:280px;}
+  .about-text p{color:var(--muted); line-height:1.9; font-size:1.05rem; margin-bottom:18px;}
+  .about-list{margin-top:28px; display:flex; flex-direction:column; gap:14px;}
+  .about-item{display:flex; align-items:center; gap:12px; font-size:0.98rem;}
+  .about-item .dot{width:8px;height:8px;border-radius:50%; background:linear-gradient(135deg,var(--violet-1),var(--violet-2)); flex-shrink:0;}
+
+  /* CONTACT */
+  .contact-box{
+    max-width:720px;
+    margin:0 auto;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:60px 48px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .contact-box::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(400px circle at 50% 0%, rgba(139,92,246,0.15), transparent 70%);
+    pointer-events:none;
+  }
+  .contact-box h2{font-size:clamp(1.6rem,3vw,2.2rem); font-weight:900; margin-bottom:16px;}
+  .contact-box p{color:var(--muted); margin-bottom:36px; line-height:1.8;}
+  .contact-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+
+  footer{
+    text-align:center;
+    padding:40px 6vw;
+    color:var(--muted);
+    font-size:0.9rem;
+    border-top:1px solid var(--border);
+  }
+  footer span{color:var(--violet-3);}
+
+  /* reveal on scroll */
+  .reveal{opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (max-width:768px){
+    .nav-links{display:none;}
+    section{padding:80px 6vw;}
+    .about{flex-direction:column;}
+    .contact-box{padding:44px 24px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--violet-3);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="wrap">
+
+  <nav>
+    <div class="logo">Crevo</div>
+    <div class="nav-links">
+      <a href="#projects">أعمالنا</a>
+      <a href="#services">خدماتنا</a>
+      <a href="#about">من نحن</a>
+      <a href="#contact">تواصل</a>
+    </div>
+    <a class="nav-cta" href="#contact">اطلب موقعك</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding-top:0;">
+    <div class="eyebrow">✦ خدمة تصميم مواقع احترافية</div>
+    <h1>نبني مواقع <span class="accent">تحوّل زوّارك</span><br>إلى عملاء حقيقيين</h1>
+    <p>Crevo تصمم مواقع مخصصة للمتاجر والعلامات التجارية الجزائرية — تصميم أنيق، أداء سريع، ونتائج تُقاس.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#contact">ابدأ مشروعك ←</a>
+      <a class="btn-ghost" href="#projects">شاهد أعمالنا</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num">+12</div><div class="label">مشروع مُنجز</div></div>
+      <div class="stat"><div class="num">58</div><div class="label">ولاية مغطاة</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">تسليم مضمون</div></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-head reveal">
+      <div class="section-tag">أعمالنا</div>
+      <div class="section-title">مشاريع نفتخر بها</div>
+      <div class="section-desc">كل مشروع مبني بعناية — من الفكرة إلى النشر، بجودة تنافس أفضل الوكالات.</div>
+    </div>
+
+    <div class="projects-grid">
+
+      <a class="project-card reveal" href="#" target="_blank" rel="noopener">
+        <div class="project-thumb" style="background:linear-gradient(135deg,#1a1030,#2b1650);">123SHOP</div>
+        <!-- رابط 123SHOP: عطينيه ونحطو هنا -->
+        <div class="project-body">
+          <span class="project-tag">متجر إلكتروني</span>
+          <h3>123SHOP</h3>
+          <p>متجر ملابس فاخر بأنيميشن سلسة، نظام طلبات عبر واتساب، ودعم كامل للولايات والبلديات الجزائرية.</p>
+          <div class="project-link">زيارة الموقع <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://wolfit-dz.vercel.app/" target="_blank" rel="noopener">
+        <div class="project-thumb" style="background:linear-gradient(135deg,#0f0f0f,#2a2a2a);">WOLFIT</div>
+        <div class="project-body">
+          <span class="project-tag">سبورتوير</span>
+          <h3>WOLFIT DZ</h3>
+          <p>هوية بصرية مونوكروم لعلامة ملابس رياضية جزائرية، مع فلاتر منتجات وسلة تسوق تفاعلية.</p>
+          <div class="project-link">زيارة الموقع <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://drakar-store.vercel.app/" target="_blank" rel="noopener">
+        <div class="project-thumb" style="background:linear-gradient(135deg,#1a1420,#3a1a3a);">DRAKAR</div>
+        <div class="project-body">
+          <span class="project-tag">متجر إلكتروني</span>
+          <h3>DRAKAR</h3>
+          <p>متجر أدوات رياضية بأنيميشن متقدمة، فلترة منتجات، وسلة تسوق كاملة مع تغطية 58 ولاية.</p>
+          <div class="project-link">زيارة الموقع <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://souileh-store-dz.vercel.app/" target="_blank" rel="noopener">
+        <div class="project-thumb" style="background:linear-gradient(135deg,#1c1206,#3d2a08);">SOUILEH</div>
+        <div class="project-body">
+          <span class="project-tag">متجر إلكتروني</span>
+          <h3>SOUILEH FIT</h3>
+          <p>موقع بهوية ذهبية وسوداء فاخرة، مبني من الصفر لعلامة ملابس رياضية بمعايير عالية.</p>
+          <div class="project-link">زيارة الموقع <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://movielenss-engoy-serieandmovie.vercel.app/" target="_blank" rel="noopener">
+        <div class="project-thumb" style="background:linear-gradient(135deg,#0a0a1a,#1a0f2e);">MOVIELENSS</div>
+        <div class="project-body">
+          <span class="project-tag">منصة بث</span>
+          <h3>MovieLenss</h3>
+          <p>منصة أفلام ومسلسلات تدعم الترجمة، تسجيل الدخول، وقوائم حلقات كاملة — تجربة مشاهدة سلسة.</p>
+          <div class="project-link">زيارة الموقع <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-head reveal">
+      <div class="section-tag">خدماتنا</div>
+      <div class="section-title">كل ما يحتاجه موقعك</div>
+      <div class="section-desc">من الفكرة الأولى إلى النشر النهائي، نغطي كل مرحلة بجودة احترافية.</div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">🛒</div>
+        <h3>متاجر إلكترونية</h3>
+        <p>متاجر كاملة مع سلة شراء، فلاتر منتجات، وربط مباشر بواتساب للطلبات.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🎨</div>
+        <h3>تصميم هوية بصرية</h3>
+        <p>ألوان، خطوط، وتصميم واجهة يعكس شخصية علامتك التجارية بدقة.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">⚡</div>
+        <h3>مواقع تعريفية سريعة</h3>
+        <p>صفحات هبوط وواجهات تعريفية سريعة التحميل ومهيأة لمحركات البحث.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">💬</div>
+        <h3>تكامل واتساب</h3>
+        <p>أنظمة طلبات وفورمات تصل مباشرة لواتساب أو Gmail بدون تعقيد.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🚀</div>
+        <h3>نشر واستضافة</h3>
+        <p>ربط المشروع بـ GitHub ونشره على Vercel بسرعة وبدون توقف.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🔧</div>
+        <h3>صيانة وتحديثات</h3>
+        <p>تعديلات، تحسينات، وإصلاح أخطاء بعد التسليم متى احتجت.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about">
+      <div class="about-visual reveal">
+        <div class="ring">
+          <div class="ring-inner">C</div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <div class="section-tag">من نحن</div>
+        <div class="section-title" style="margin-bottom:20px;">Crevo — تصميم يليق بعلامتك</div>
+        <p>Crevo هي خدمة تصميم وتطوير مواقع مخصصة للتجار والعلامات التجارية في الجزائر. نحوّل فكرتك إلى موقع احترافي جاهز للنشر — بجودة تنافس أفضل الوكالات العالمية.</p>
+        <p>نعمل بشكل مباشر معك من أول فكرة إلى آخر تفصيل، مع التزام كامل بالجودة والسرعة في التسليم.</p>
+        <div class="about-list">
+          <div class="about-item"><span class="dot"></span> تسليم ملفات جاهزة للنشر مباشرة</div>
+          <div class="about-item"><span class="dot"></span> دعم كامل لـ 58 ولاية جزائرية</div>
+          <div class="about-item"><span class="dot"></span> تكامل مباشر مع واتساب و Gmail</div>
+          <div class="about-item"><span class="dot"></span> متابعة ودعم بعد التسليم</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-box reveal">
+      <h2>جاهز تبدأ مشروعك؟</h2>
+      <p>تواصل معنا الآن وخلينا نحوّلو فكرتك إلى موقع حقيقي.</p>
+      <div class="contact-actions">
+        <a class="btn-primary" href="https://wa.me/213799426700" target="_blank" rel="noopener">تواصل عبر واتساب</a>
+        <a class="btn-ghost" href="mailto:designercrevo@gmail.com">راسلنا عبر Gmail</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    صُنع بـ <span>♥</span> بواسطة Crevo — جميع الحقوق محفوظة © 2026
+  </footer>
+
+</div>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
